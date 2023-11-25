@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import pandas as pd
 from prophet import Prophet
 import requests
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type
 
 def get_user_ratings(handle):
     url = f"https://codeforces.com/api/user.rating?handle={handle}"
@@ -19,6 +22,7 @@ def get_user_ratings(handle):
         return None
 
 @app.route("/", methods=["POST"])
+@cross_origin()
 def index():
     if request.method == "POST":
         # Get username and number of predictions from the form
