@@ -6,7 +6,7 @@ import requests
 
 app = Flask(__name__)
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 def get_user_ratings(handle):
     url = f"https://codeforces.com/api/user.rating?handle={handle}"
