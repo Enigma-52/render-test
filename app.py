@@ -1,12 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
 import pandas as pd
 from prophet import Prophet
-import numpy as np
-import sys, setuptools, tokenize
 import requests
 
 app = Flask(__name__)
-
 
 def get_user_ratings(handle):
     url = f"https://codeforces.com/api/user.rating?handle={handle}"
@@ -21,8 +18,7 @@ def get_user_ratings(handle):
     else:
         return None
 
-
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["POST"])
 def index():
     if request.method == "POST":
         # Get username and number of predictions from the form
@@ -60,14 +56,8 @@ def index():
             # Combine user ratings and predicted ratings
             all_ratings = user_ratings + predicted_ratings
 
-            # Render the template with data
-            return render_template(
-                "index.html", num_predictions=num_predictions, all_ratings=all_ratings
-            )
-
-    # Render the template without data if it's a GET request
-    return render_template("index.html", all_ratings=[])
-
+            # Return JSON response with all ratings
+            return jsonify({"all_ratings": all_ratings})
 
 if __name__ == "__main__":
     app.run(debug=True)
